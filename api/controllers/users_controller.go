@@ -24,13 +24,13 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity,err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 	user.Prepare()
 	err = user.Validate("")
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity,err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 	userCreated, err := user.SaveUser(server.DB)
@@ -39,13 +39,13 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	w.Header().Set("Location",fmt.Sprintf("%s%s/%d",r.Host,r.RequestURI,userCreated.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.ID))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
 
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
-	users,err := user.FindAllUsers(server.DB)
+	users, err := user.FindAllUsers(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -55,14 +55,14 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	uid, err := strconv.ParseUint(vars["id"],10,32)
+	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
-		responses.ERROR(w,http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w,http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 	user := models.User{}
@@ -77,7 +77,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if tokenID != uint32(uid) {
-		responses.ERROR(w,http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
 	user.Prepare()
@@ -95,7 +95,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
-func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request)  {
+func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	user := models.User{}
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
@@ -117,6 +117,6 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request)  {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Set("Entity", fmt.Sprintf("%d",uid))
-	responses.JSON(w, http.StatusNoContent,"")
+	w.Header().Set("Entity", fmt.Sprintf("%d", uid))
+	responses.JSON(w, http.StatusNoContent, "")
 }
