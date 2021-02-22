@@ -8,7 +8,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/iamsyahidi/forum-backend-golang/api/models"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	// _ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type Server struct {
@@ -23,7 +25,7 @@ func (server *Server) Initialize(DbDriver, DbUser, DbPassword, DbPort, DbHost, D
 		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DbUser, DbPassword, DbHost, DbPort, DbName)
 		server.DB, err = gorm.Open(DbDriver, DBURL)
 		if err != nil {
-			fmt.Printf("Cannot connect to %s database", DbDriver)
+			fmt.Printf("Cannot connect to %s database ", DbDriver)
 			log.Fatal("This is the error : ", err)
 		} else {
 			fmt.Printf("Successfully connected to the %s database", DbDriver)
@@ -34,7 +36,7 @@ func (server *Server) Initialize(DbDriver, DbUser, DbPassword, DbPort, DbHost, D
 		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
 		server.DB, err = gorm.Open(DbDriver, DBURL)
 		if err != nil {
-			fmt.Printf("Cannot connect to %s database", DbDriver)
+			fmt.Printf("Cannot connect to %s database ", DbDriver)
 			log.Fatal("This is the error : ", err)
 		} else {
 			fmt.Printf("Successfully connected to the %s database", DbDriver)
