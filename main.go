@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/iamsyahidi/forum-backend-golang/api"
 
 func main() {
-	fmt.Print("main")
+	api.Run()
 }
