@@ -157,7 +157,7 @@ func seedOneUserAndOnePost() (models.Post, error) {
 	return post, nil
 }
 
-func seedUserAndPosts() ([]models.User, []models.Post, error) {
+func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 
 	var err error
 	if err != nil {
