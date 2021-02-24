@@ -76,7 +76,8 @@ func TestGetUserByID(t *testing.T) {
 	assert.Equal(t, foundUser.Nickname, user.Nickname)
 }
 
-func TestUpdateAUSer(t *testing.T) {
+func TestUpdateAUser(t *testing.T) {
+
 	err := refreshUserTable()
 	if err != nil {
 		log.Fatal(err)

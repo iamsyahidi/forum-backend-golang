@@ -118,7 +118,8 @@ func (u *User) FindUserById(db *gorm.DB, uid uint32) (*User, error) {
 }
 
 func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
-	//To hash the password
+
+	// To hash the password
 	err := u.BeforeSave()
 	if err != nil {
 		log.Fatal(err)
@@ -128,7 +129,7 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 			"password":  u.Password,
 			"nickname":  u.Nickname,
 			"email":     u.Email,
-			"update_at": time.Now(),
+			"updated_at": time.Now(),
 		},
 	)
 	if db.Error != nil {
