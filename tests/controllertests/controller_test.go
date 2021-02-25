@@ -85,29 +85,33 @@ func seedOneUser() (models.User, error) {
 	return user, nil
 }
 
-func seedUsers() error {
+func seedUsers() ([]models.User, error) {
 
+	var err error
+	if err != nil {
+		return nil, err
+	}
 	users := []models.User{
 		models.User{
-			Nickname: "Ilham Syahidi",
-			Email:    "iamsyahidi@gmail.com",
-			Password: "p455word",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
+			Password: "password",
 		},
 		models.User{
-			Nickname: "Dummy",
-			Email:    "dummy@gmail.com",
-			Password: "p455word",
+			Nickname: "Kenny Morris",
+			Email:    "kenny@gmail.com",
+			Password: "password",
 		},
 	}
 
 	for i, _ := range users {
 		err := server.DB.Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return users, nil
 }
 
 func refreshUserAndPostTable() error {
@@ -166,14 +170,14 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 
 	var users = []models.User{
 		models.User{
-			Nickname: "Ucil",
-			Email:    "ucil@gmail.com",
-			Password: "p455word",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
+			Password: "password",
 		},
 		models.User{
-			Nickname: "Panci",
-			Email:    "panci@gmail.com",
-			Password: "p455word",
+			Nickname: "Magu Frank",
+			Email:    "magu@gmail.com",
+			Password: "password",
 		},
 	}
 
