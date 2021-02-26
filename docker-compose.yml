@@ -1,36 +1,36 @@
-version: '3'
+version: "3"
 services:
   app:
     container_name: forum_app
-    build: 
+    build:
       context: .
       dockerfile: ./Dockerfile
-    ports: 
+    ports:
       - 8080:8080
     restart: on-failure
-    volumes: 
-      - api:/usr/src/app/
-    depends_on: 
+    volumes:
+      - .:/usr/src/app
+    depends_on:
       - forum-backend-mysql
-      # -forum-backend-postgres    # Uncomment this when using postgres.
-    networks: 
+      # - forum-backend-postgres    # Uncomment this when using postgres.
+    networks:
       - forum_network
 
   # forum-backend-postgres:
   #   image: postgres:latest
   #   container_name: forum_db_postgres
   #   environment:
-  #     - POSTGRES_USER=${DB_USER}  
+  #     - POSTGRES_USER=${DB_USER}
   #     - POSTGRES_PASSWORD=${DB_PASSWORD}
   #     - POSTGRES_DB=${DB_NAME}
-  #     - DATABASE_HOST=${DB_HOST} 
+  #     - DATABASE_HOST=${DB_HOST}
   #   ports:
   #     - '5432:5432'
   #   volumes:
   #     - database_postgres:/var/lib/postgresql/data
   #   networks:
   #     - forum_network
-    
+
   # pgadmin:
   #   image: dpage/pgadmin4
   #   container_name: pgadmin_container
@@ -38,7 +38,7 @@ services:
   #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
   #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
   #   depends_on:
-  #     - forum-postgres
+  #     - forum-backend-postgres
   #   ports:
   #     - "5050:80"
   #   networks:
@@ -52,10 +52,11 @@ services:
       - 3306:3306
     environment:
       - MYSQL_ROOT_HOST=${DB_HOST}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
       - database_mysql:/var/lib/mysql
     networks:
@@ -67,24 +68,22 @@ services:
     depends_on:
       - forum-backend-mysql
     environment:
-      - PMA_HOST=mysql  # Note the mysql. Must be the name of the what you used as the mysql service.
+      - PMA_HOST=forum-backend-mysql  # Note the mysql. Must be the name of the what you used as the mysql service.
       - PMA_USER=${DB_USER}
       - PMA_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
       - 9090:80
     restart: always
     networks:
       - forum_network
 
-volumes: 
+volumes:
   api:
   database_mysql:
   # database_postgres:
 
 # Networks to be created to facilitate communication between containers
-networks: 
+networks:
   forum_network:
     driver: bridge
-
-
-  
