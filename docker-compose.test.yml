@@ -1,13 +1,15 @@
 version: "3"
-
 services:
   app_test:
     container_name: forum_app_test
     build:
       context: .
       dockerfile: ./Dockerfile.test
+    ports:
+      - 8080:8080
+    restart: on-failure
     volumes:
-      - api_test:/app/src/app/
+      - api_test:/usr/src/app/
     depends_on:
       # - postgres_test
       - mysql_test
@@ -33,15 +35,17 @@ services:
     image: mysql:5.7
     container_name: forum_db_test_mysql    
     ports: 
-      - 3333:3306
+      - 3306:3306
     environment: 
-      - MYSQL_DATABASE=${TEST_DB_NAME}
+      - MYSQL_ROOT_HOST=${TEST_DB_HOST}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=${TEST_DB_PASSWORD}
       - MYSQL_USER=${TEST_DB_USER}
       - MYSQL_PASSWORD=${TEST_DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${TEST_DB_PASSWORD}
-      - DATABASE_HOST=${TEST_DB_HOST} 
+      - MYSQL_DATABASE=${TEST_DB_NAME}
     volumes:
       - database_mysql_test:/var/lib/mysql
+    restart: on-failure
     networks:
       - forum_stack_test
 
