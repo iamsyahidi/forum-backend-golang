@@ -3,6 +3,8 @@ services:
   app:
     container_name: forum_app
     build: 
+      context: .
+      dockerfile: ./Dockerfile
     ports: 
       - 8080:8080
     restart: on-failure
@@ -12,7 +14,7 @@ services:
       - forum-backend-mysql
       # -forum-backend-postgres    # Uncomment this when using postgres.
     networks: 
-      - forum_stack
+      - forum_network
 
   # forum-backend-postgres:
   #   image: postgres:latest
@@ -27,7 +29,7 @@ services:
   #   volumes:
   #     - database_postgres:/var/lib/postgresql/data
   #   networks:
-  #     - forum_stack
+  #     - forum_network
     
   # pgadmin:
   #   image: dpage/pgadmin4
@@ -40,7 +42,7 @@ services:
   #   ports:
   #     - "5050:80"
   #   networks:
-  #     - forum_stack
+  #     - forum_network
   #   restart: unless-stopped
 
   forum-backend-mysql:
@@ -57,7 +59,7 @@ services:
     volumes:
       - database_mysql:/var/lib/mysql
     networks:
-      - forum-backend
+      - forum_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -72,17 +74,17 @@ services:
       - 9090:80
     restart: always
     networks:
-      - forum_stack
+      - forum_network
 
-  volumes: 
-    api:
-    database_mysql:
-    # database_postgres:
+volumes: 
+  api:
+  database_mysql:
+  # database_postgres:
 
-  # Networks to be created to facilitate communication between containers
-  networks: 
-    forum_stack:
-      driver: bridge
+# Networks to be created to facilitate communication between containers
+networks: 
+  forum_network:
+    driver: bridge
 
 
   
