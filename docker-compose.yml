@@ -9,7 +9,7 @@ services:
       - 8080:8080
     restart: on-failure
     volumes:
-      - .:/usr/src/app
+      - api:/usr/src/app/
     depends_on:
       - forum-backend-mysql
       # - forum-backend-postgres    # Uncomment this when using postgres.
